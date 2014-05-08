@@ -3,19 +3,13 @@ package com.x.lockscreen;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-
-import com.x.log.MyLog;
 
 public class MainActivity extends Activity {
 
 	private DevicePolicyManager devicePolicyManager = null;
 
 	private static final int REQUEST_CODE_ADD_DEVICE_ADMIN = 100;
-
-	private String tag = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +19,10 @@ public class MainActivity extends Activity {
 		if (devicePolicyManager.isAdminActive(Dar.getCn(this))) {
 			devicePolicyManager.lockNow();
 			devicePolicyManager.lockNow();
+			finish();
 		} else {
 			startAddDeviceAdminAty();
 		}
-		finish();
-		setContentView(R.layout.activity_main);
 	}
 
 	private void startAddDeviceAdminAty() {
@@ -42,35 +35,18 @@ public class MainActivity extends Activity {
 		startActivityForResult(i, REQUEST_CODE_ADD_DEVICE_ADMIN);
 	}
 
-	private void lockNow() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			devicePolicyManager.lockNow();
-			devicePolicyManager.lockNow();
-		}
-	}
-
 	@Override
 	protected void onDestroy() {
+		devicePolicyManager.lockNow();
+		devicePolicyManager = null;
 		super.onDestroy();
-		MyLog.i(tag, "注销");
-		lockNow();
-		finish();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
-			lockNow();
+			devicePolicyManager.lockNow();
+			devicePolicyManager.lockNow();
 			finish();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
