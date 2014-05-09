@@ -37,18 +37,20 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
+		
 		devicePolicyManager.lockNow();
 		devicePolicyManager = null;
-		super.onDestroy();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
 		if (resultCode == Activity.RESULT_OK) {
 			devicePolicyManager.lockNow();
 			devicePolicyManager.lockNow();
 			finish();
 		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
