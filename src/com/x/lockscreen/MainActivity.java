@@ -35,18 +35,32 @@ public class MainActivity extends Activity {
 		startActivityForResult(i, REQUEST_CODE_ADD_DEVICE_ADMIN);
 	}
 
+	/**
+	 * 退出程序
+	 */
+	private void exitActivity() {
+		try {
+			android.os.Process.killProcess(android.os.Process.myPid());
+		} catch (Exception e) {
+			finish();
+		}
+	}
+
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
-		
 		devicePolicyManager.lockNow();
 		devicePolicyManager = null;
+
+		// 结束程序
+		exitActivity();
+
+		super.onDestroy();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if (resultCode == Activity.RESULT_OK) {
 			devicePolicyManager.lockNow();
 			devicePolicyManager.lockNow();
